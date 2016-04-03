@@ -1,8 +1,6 @@
-# CleanData
+## CleanData
 Getting and Cleaning Data Course Project
 
-##Clean data from "UCI HAR Dataset"
-library(dplyr)
 
 # 1.1 Get data from "train" and merge 
 train_subject_train = read.table("./UCI HAR Dataset/train/subject_train.txt")
