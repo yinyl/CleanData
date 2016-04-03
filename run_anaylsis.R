@@ -35,3 +35,18 @@ mean_n <- grep("mean", c_name)
 std_n <- grep("std", c_name)
 data_mean_std <- cbind(train_test[1], train_test[2], train_test[mean_n], train_test[std_n])
 rm(list = c("c_name", "mean_n", "std_n"))
+
+# 5.1 Descriptive activity names to the activities in the data set
+activity_labels <- read.table("./UCI HAR Dataset/activity_labels.txt")
+for (i in 1:nrow(data_mean_std)){
+  data_mean_std[i,2] <- as.character(activity_labels[as.numeric(data_mean_std[i,2]),2])
+}
+rm(list = c("activity_labels", "train_test"))
+
+# 6.1 Creates a second, independent tidy data set with the average of each variable for each activity and each subject.
+dataMelt <- melt(data_mean_std, id.vars = c("subject", "activity"), measure.vars = names(data_mean_std)[3:81])
+data_subject <- dcast(dataMelt, subject ~ variable, mean)
+data_activity <- dcast(dataMelt, activity ~ variable, mean)
+data_subject <- `colnames<-`(data_subject,c("subject/activity",names(data_subject[2:80])))    #unify column names
+data_activity <- `colnames<-`(data_activity,c("subject/activity",names(data_activity[2:80]))) #unify column names
+tidy_data_set <- rbind(data_subject, data_activity)
